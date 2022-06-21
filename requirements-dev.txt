@@ -1,0 +1,5 @@
+# Dev/test requirements
+build
+pre-commit
+pytest
+twine
