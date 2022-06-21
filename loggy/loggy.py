@@ -1,6 +1,9 @@
 import logging
 from typing import Any
 
+# TODO:
+# * Different log formats by level, use same
+#   discovery as the COLORS dict in LogFormatter?
 LOG_FORMAT = ("%(asctime)s | %(levelname)s | %(message)s | (%(filename)s:%(lineno)d) |", "%m-%d-%Y %I:%M:%S %p %Z")
 
 
@@ -49,6 +52,10 @@ class LogFormatter(logging.Formatter):
         log_str = logging.Formatter(self._fmt)
         log_str = log_str.format(record)
 
+        # TODO:
+        # * Exceptions aren't colored, not sure why.
+        #   Need a good way to check for colors, make the self._fmt update after
+        #   and append to the current message.
         if record.exc_text:
             if self.use_color and self._fmt:
                 print("here")
@@ -148,6 +155,11 @@ def get_loggy(log_level: str = "info", use_color: bool = False):
     Returns:
         logger (Logger): A log class with access to `critical`, `debug`, `error`,
             `info`, and `warning` level logging.
+
+    TODO:
+        * Optionally take a filename
+            * If filename is used, color shouldn't be allowed
+        * Take an optional log format tuple
     """
     logger = logging.getLogger(__package__)
     logger.setLevel(log_level.upper())
