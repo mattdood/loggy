@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from typing import Dict, Tuple
 
 # TODO:
 # * Different log formats by level, use same
@@ -8,7 +8,7 @@ LOG_FORMAT = ("%(asctime)s | %(levelname)s | %(message)s | (%(filename)s:%(linen
 
 
 class LogFormatter(logging.Formatter):
-    """Formats logs for color."""
+    """Formats custom log calls."""
 
     grey = "\033[38;20m"
     yellow = "\033[33;20m"
@@ -25,45 +25,39 @@ class LogFormatter(logging.Formatter):
     }
 
     def __init__(self, *args, use_color: bool = False, **kwargs) -> None:
+        """Initializes a `Formatter` with additional features.
+
+        To use color we append colors to the original format at
+        the front and back (color + fmt + reset). To avoid having the
+        format polluted we keep a separate copy.
+        """
         super().__init__(*args, **kwargs)
         self.use_color = use_color
 
-    def format(self, record: Any) -> str:
-        """Formats `Exception` records.
+        # set the original format so it can be overwritten
+        # between operations
+        self.original_fmt = self._fmt
 
-        Formats any newlines from exceptions into the
-        string representation of an error. Overrides the
-        formatter of the `logging.Formatter`.
+    def format(self, record: logging.LogRecord) -> str:
+        """Formats new records, optionally with color.
 
         Params:
-            record (Any): Exception to format.
+            record (logging.LogRecord): Log to format.
 
         Returns:
-            log_str (str): String representation of the log record.
+            log_str (str): Formatted string representation of the log record.
         """
 
-        if self.use_color and self._fmt:
+        color_fmt = None
+        if self.use_color and self.original_fmt:
             log_fmt = self.COLORS.get(record.levelno, "")
-            if not record.exc_text:
-                self._fmt = log_fmt + self._fmt + self.reset
-            else:
-                self._fmt = log_fmt + self._fmt
 
-        log_str = logging.Formatter(self._fmt)
-        log_str = log_str.format(record)
+            # Create a format to use for the colored output
+            # using the original format from instantiation
+            # to have a clean `self._fmt` between calls.
+            color_fmt = log_fmt + self.original_fmt + self.reset
 
-        # TODO:
-        # * Exceptions aren't colored, not sure why.
-        #   Need a good way to check for colors, make the self._fmt update after
-        #   and append to the current message.
-        if record.exc_text:
-            if self.use_color and self._fmt:
-                print("here")
-                log_fmt = self.COLORS.get(record.levelno, "")
-                log_str = log_fmt + log_str.replace("\n", "") + "|" + self.reset
-            else:
-                log_str = log_str.replace("\n", "") + "|"
-
+        log_str = logging.Formatter(color_fmt if color_fmt else self._fmt).format(record)
         return log_str
 
 
