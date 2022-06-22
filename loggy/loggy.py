@@ -113,7 +113,11 @@ def addLoggingLevel(level_name: str, level_number: int, method_name: str = None)
     setattr(logging, method_name, logToRoot)
 
 
-def get_loggy(log_level: str = "info", use_color: bool = False):
+@exclusive_args(["use_color", "log_file"])
+def get_loggy(log_level: str = "info",
+              use_color: bool = False,
+              log_format: Tuple[str, str] = None,
+              log_file: Dict = None) -> logging.Logger:
     """Returns an instance of our custom `logging`.
 
     Logging should be used in place of printing, this
@@ -137,27 +141,43 @@ def get_loggy(log_level: str = "info", use_color: bool = False):
             try:
                 # something
             catch Exception as e:
-                log.error(f"We caught an error: {e}")
+                log.exception(f"We caught an error: {e}")
         ```
 
     Params:
         log_level (str): Log level to utilize, this defaults to `info`,
             which won't print `debug` level. If you want `debug` then pass
             `get_loggy(log_level="debug")`.
+        use_color (bool): Whether or not to have colored output. Defaults to
+            `False`.
+        log_format (Tuple[str, str]): Log format to overwrite the default.
+            Example: `('%(asctime)s | %(levelname)s | %(message)s)', 'mm-dd-yyyy HH:MM:S'`
+        log_file (Dict[str, str]): File path to a log file to create, including
+            access type, encoding, delay, errors. See `logging.FileHandler` for kwargs.
+            Example: `{"filename": "sample.log", "mode": "a"}`
 
     Returns:
         logger (Logger): A log class with access to `critical`, `debug`, `error`,
             `info`, and `warning` level logging.
-
-    TODO:
-        * Optionally take a filename
-            * If filename is used, color shouldn't be allowed
-        * Take an optional log format tuple
     """
     logger = logging.getLogger(__package__)
     logger.setLevel(log_level.upper())
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(LogFormatter(*LOG_FORMAT, use_color=use_color))
-    logger.addHandler(stream_handler)
+
+    # Use an append-only file handler if filename supplied
+    if log_file:
+        handler = logging.FileHandler(**log_file if log_file else dict())
+        handler.setFormatter(LogFormatter(*log_format if log_format else LOG_FORMAT))
+
+    # Use stream if no filename supplied
+    else:
+        handler = logging.StreamHandler()
+        handler.setFormatter(
+            LogFormatter(
+                *log_format if log_format else LOG_FORMAT,
+                use_color=use_color
+            )
+        )
+
+    logger.addHandler(handler)
     return logger
 
