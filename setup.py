@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="get-loggy",
-    version="0.0.1",
+    version="0.0.2",
     author="Matthew Wimberly",
     author_email="matthew.wimb@gmail.com",
     description="A simple logging utility.",
