@@ -1,10 +1,9 @@
 import logging
 from typing import Dict, Tuple
 
-# TODO:
-# * Different log formats by level, use same
-#   discovery as the COLORS dict in LogFormatter?
-LOG_FORMAT = ("%(asctime)s | %(levelname)s | %(message)s | (%(filename)s:%(lineno)d) |", "%m-%d-%Y %I:%M:%S %p %Z")
+from .exceptions import exclusive_args
+
+LOG_FORMAT = ("%(asctime)s | %(levelname)s | %(message)s | (%(filename)s:%(lineno)d:%(funcName)s) |", "%m-%d-%Y %I:%M:%S %p %Z")
 
 
 class LogFormatter(logging.Formatter):
@@ -122,7 +121,7 @@ def get_loggy(log_level: str = "info", use_color: bool = False):
     keeps us more organized by providing timestamps.
 
     Log format:
-        `mm-dd-yyyy hh:mm:ss am/pm timezone | log level | message(s) | error(s)`
+        `mm-dd-yyyy hh:mm:ss am/pm timezone | log level | message(s) | (filename:lineno:funcName)`
 
     Usage:
         ```python
