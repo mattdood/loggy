@@ -92,11 +92,11 @@ def addLoggingLevel(level_name: str, level_number: int, method_name: str = None)
         method_name = level_name.lower()
 
     if hasattr(logging, level_name):
-       raise AttributeError('{} already defined in logging module'.format(level_name))
+        raise AttributeError('{} already defined in logging module'.format(level_name))
     if hasattr(logging, method_name):
-       raise AttributeError('{} already defined in logging module'.format(method_name))
+        raise AttributeError('{} already defined in logging module'.format(method_name))
     if hasattr(logging.getLoggerClass(), method_name):
-       raise AttributeError('{} already defined in logger class'.format(method_name))
+        raise AttributeError('{} already defined in logger class'.format(method_name))
 
     # This method was inspired by the answers to Stack Overflow post
     # http://stackoverflow.com/q/2183233/2988730, especially
@@ -104,6 +104,7 @@ def addLoggingLevel(level_name: str, level_number: int, method_name: str = None)
     def logForLevel(self, message, *args, **kwargs):
         if self.isEnabledFor(level_number):
             self._log(level_number, message, args, **kwargs)
+
     def logToRoot(message, *args, **kwargs):
         logging.log(level_number, message, *args, **kwargs)
 
