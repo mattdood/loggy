@@ -1,11 +1,11 @@
-from conftest import CustomLogFormatter
 import logging
 from logging import Logger
-from loggy.exceptions import MutuallyExclusiveArgumentsError
 
 import pytest
 
+from conftest import CustomLogFormatter
 from loggy import loggy
+from loggy.exceptions import MutuallyExclusiveArgumentsError
 
 
 def test_log_format():

@@ -1,5 +1,6 @@
-import pytest
 from typing import Dict
+
+import pytest
 
 from loggy.loggy import LogFormatter
 
