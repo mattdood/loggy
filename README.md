@@ -16,7 +16,7 @@ A simple logging utility.
     target="https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmattdood%2Floggy"
     alt="Badge for sharable Twitter link."/>
 [![Pytest](https://github.com/mattdood/loggy/actions/workflows/ci.yml/badge.svg)](https://github.com/mattdood/loggy/actions/workflows/ci.yml)
-[![PyPI version](https://badge.fury.io/py/loggy.svg)](https://badge.fury.io/py/loggy)
+[![PyPI version](https://badge.fury.io/py/get-loggy.svg)](https://badge.fury.io/py/get-loggy)
 
 ## Installation
 To install the package locally use the following:
