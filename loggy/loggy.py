@@ -56,7 +56,7 @@ class LogFormatter(logging.Formatter):
             # to have a clean `self._fmt` between calls.
             color_fmt = log_fmt + self.original_fmt + self.reset
 
-        log_str = logging.Formatter(color_fmt if color_fmt else self._fmt).format(record)
+        log_str = logging.Formatter(color_fmt if color_fmt else self._fmt, self.datefmt).format(record)
         return log_str
 
 
