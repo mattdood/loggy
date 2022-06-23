@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="get-loggy",
-    version="0.0.2",
+    version="0.0.3",
     author="Matthew Wimberly",
     author_email="matthew.wimb@gmail.com",
     description="A simple logging utility.",
@@ -20,8 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "loggy"},
-    packages=setuptools.find_packages(where="loggy"),
+    packages=setuptools.find_packages(include=["loggy", "loggy.*"]),
     package_data={},
     python_requires=">=3.6",
 )
