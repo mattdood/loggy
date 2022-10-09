@@ -1,4 +1,5 @@
 # Dev/test requirements
+-r requirements.txt
 build
 pre-commit
 pytest
