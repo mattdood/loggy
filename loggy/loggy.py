@@ -162,6 +162,11 @@ def get_loggy(log_level: str = "info",
             `info`, and `warning` level logging.
     """
     logger = logging.getLogger(__package__)
+
+    # Remove any existing handlers
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+
     logger.setLevel(log_level.upper())
 
     # Use an append-only file handler if filename supplied
@@ -180,5 +185,6 @@ def get_loggy(log_level: str = "info",
         )
 
     logger.addHandler(handler)
+
     return logger
 

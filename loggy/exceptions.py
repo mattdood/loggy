@@ -1,5 +1,5 @@
 import functools
-from typing import List
+from typing import Any, List
 
 
 class MutuallyExclusiveArgumentsError(Exception):
@@ -9,7 +9,7 @@ class MutuallyExclusiveArgumentsError(Exception):
         super().__init__(err)
 
 
-def exclusive_args(kwarg_names: List[str]):
+def exclusive_args(kwarg_names: List[str]) -> Any:
     """Mutually exclusive argument wrapper.
 
     Takes a list of arguments then compares them to
